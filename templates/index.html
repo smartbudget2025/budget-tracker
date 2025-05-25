@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Budget Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-blue-600">Smart Budget Tracker</h1>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-green-100 p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold text-green-800">Total Income</h2>
+                <p class="text-3xl font-bold text-green-600" id="total-income">$0.00</p>
+            </div>
+            <div class="bg-red-100 p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold text-red-800">Total Expenses</h2>
+                <p class="text-3xl font-bold text-red-600" id="total-expenses">$0.00</p>
+            </div>
+            <div class="bg-blue-100 p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold text-blue-800">Balance</h2>
+                <p class="text-3xl font-bold text-blue-600" id="balance">$0.00</p>
+            </div>
+        </div>
+
+        <!-- Add Transaction Form -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Add Transaction</h2>
+            <form id="transaction-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Type</label>
+                    <select name="type" class="w-full p-2 border rounded" required>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Amount</label>
+                    <input type="number" name="amount" class="w-full p-2 border rounded" required step="0.01">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Category</label>
+                    <input type="text" name="category" class="w-full p-2 border rounded" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <input type="text" name="description" class="w-full p-2 border rounded">
+                </div>
+                <div class="md:col-span-2">
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                        Add Transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Transactions List -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-2xl font-semibold mb-4">Recent Transactions</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-2 text-left">Date</th>
+                            <th class="px-4 py-2 text-left">Type</th>
+                            <th class="px-4 py-2 text-left">Category</th>
+                            <th class="px-4 py-2 text-left">Description</th>
+                            <th class="px-4 py-2 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-list"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch and display summary
+        async function updateSummary() {
+            const response = await fetch('/api/summary');
+            const data = await response.json();
+            document.getElementById('total-income').textContent = `$${data.income.toFixed(2)}`;
+            document.getElementById('total-expenses').textContent = `$${data.expenses.toFixed(2)}`;
+            document.getElementById('balance').textContent = `$${data.balance.toFixed(2)}`;
+        }
+
+        // Fetch and display transactions
+        async function updateTransactions() {
+            const response = await fetch('/api/transactions');
+            const transactions = await response.json();
+            const tbody = document.getElementById('transactions-list');
+            tbody.innerHTML = transactions.map(t => `
+                <tr class="border-b">
+                    <td class="px-4 py-2">${new Date(t.date).toLocaleDateString()}</td>
+                    <td class="px-4 py-2 ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}">${t.type}</td>
+                    <td class="px-4 py-2">${t.category}</td>
+                    <td class="px-4 py-2">${t.description}</td>
+                    <td class="px-4 py-2 text-right">$${t.amount.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Handle form submission
+        document.getElementById('transaction-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                type: formData.get('type'),
+                amount: parseFloat(formData.get('amount')),
+                category: formData.get('category'),
+                description: formData.get('description')
+            };
+
+            await fetch('/api/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            e.target.reset();
+            updateSummary();
+            updateTransactions();
+        });
+
+        // Initial load
+        updateSummary();
+        updateTransactions();
+    </script>
+</body>
+</html> 
