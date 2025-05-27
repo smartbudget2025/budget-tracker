@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2048" height="2048" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="2048" height="2048" fill="#2563EB"/>
+  
+  <!-- App icon -->
+  <g transform="translate(512, 512)">
+    <!-- Circle -->
+    <circle cx="512" cy="512" r="384" fill="#FFFFFF" opacity="0.1"/>
+    
+    <!-- Pound symbol -->
+    <path d="M512 256C353.78 256 224 385.78 224 544s129.78 288 288 288 288-129.78 288-288S670.22 256 512 256zm0 48c132.55 0 240 107.45 240 240s-107.45 240-240 240S272 676.55 272 544 379.45 304 512 304z" fill="#FFFFFF"/>
+    
+    <!-- Graph lines -->
+    <path d="M384 640h256M384 544h256M384 448h256" stroke="#FFFFFF" stroke-width="24" stroke-linecap="round"/>
+    
+    <!-- Pound symbol -->
+    <path d="M496 352v384M448 544h128M448 448h128" stroke="#FFFFFF" stroke-width="32" stroke-linecap="round"/>
+  </g>
+  
+  <!-- App name -->
+  <text x="1024" y="1536" font-family="SF Pro Display, -apple-system, system-ui" font-size="96" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Budget Tracker</text>
+</svg> 

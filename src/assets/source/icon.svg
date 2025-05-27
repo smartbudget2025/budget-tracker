@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="224" fill="#2563EB"/>
+  
+  <!-- Pound symbol -->
+  <path d="M512 96C282.77 96 96 282.77 96 512s186.77 416 416 416 416-186.77 416-416S741.23 96 512 96zm0 64c194.29 0 352 157.71 352 352s-157.71 352-352 352S160 706.29 160 512 317.71 160 512 160z" fill="#FFFFFF"/>
+  
+  <!-- Graph lines -->
+  <path d="M320 640h384M320 512h384M320 384h384" stroke="#FFFFFF" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- Pound symbol -->
+  <path d="M480 288v448M416 512h128M416 384h128" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round"/>
+</svg> 
